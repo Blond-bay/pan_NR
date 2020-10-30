@@ -1,12 +1,36 @@
 import tkinter as tk
-import time
 from PIL import ImageTk,Image,ImageDraw
 from functools import partial
-from importlib import reload 
 
 
 app = tk.Tk()
 app.title("Pan New Rock")
+
+#Frame pour liste et suppr
+frame = tk.Frame()
+frame.pack(side='left')
+
+#Canva dans frame pour liste bloc
+canvas_boutton = tk.Canvas(frame)
+canvas_boutton.pack()
+
+#Canva dans frame pour suppr bloc
+canvas_supp = tk.Canvas(frame)
+canvas_supp.pack(side='bottom')
+
+#Frame pour crée le bloc
+frame1 = tk.Frame()
+frame1.pack(side='top')
+
+
+#                   #
+#   Update a frame  #
+#                   #
+def update(thing,func):
+    for widget in thing.winfo_children():
+        widget.destroy()
+    
+    func()
 
 #                   #
 #   QQ Variables    #
@@ -33,7 +57,7 @@ def clear_and_print_canvas(mur):
     canvas = tk.Canvas(app, width = l_new, height = L_new)
     canvas.create_image(0,0,image=mur_resized, anchor="nw") 
     canvas.pack(side='right')
-    frame.mainloop()
+    canvas.mainloop()
 
 
 
@@ -83,12 +107,9 @@ def stop_log():
     canvas.unbind('<Button-1>')
 
     #MAJ les boutons d'affichage
-    frame.grid_forget()
-    affiche_boutons()
+    update(canvas_boutton,affiche_boutons)
 
 #Bouttons et toussa
-frame1 = tk.Frame()
-frame1.pack(side='top')
 
 start = tk.Button(frame1,text = ('Enregistrer'), command=start_log)
 stop = tk.Button(frame1,text = ('Stop'),command=stop_log)
@@ -121,7 +142,7 @@ canvas.pack(side='right')
 #   AfFICHAGE BLOC  #
 #                   #
 
-frame = tk.Frame()
+
 
 #Fonction qui pour un bloc listé par prises, sort les coordonées pour le tracage des cerlces
 def conversion(x):
@@ -147,7 +168,6 @@ def bloc(x):
 	clear_and_print_canvas(mur)
 
 def affiche_boutons():
-    
     #Cree une liste avec tous les blocs
 
     #Dabord longue liste 
@@ -185,8 +205,47 @@ def affiche_boutons():
     #Cree et affiche les boutons
     liste_bouttons = []
     for i in range(n_blocs):
-        liste_bouttons.append(tk.Button(frame,text=("Bloc",i+1), command=partial(photo_bloc, i)))
-        liste_bouttons[i].grid(row=i,column=0)
-    frame.pack(side='left')
+        liste_bouttons.append(tk.Button(canvas_boutton,text=("Bloc",i+1), command=partial(photo_bloc, i)))
+        liste_bouttons[i].pack()
 
+#Affiche pour la 1er fois
 affiche_boutons()
+
+#                           #
+#   SUPPRESSION DE BLOCS    # 
+#                           #
+
+
+#Fonction qui supprime dans le .txt
+def efface_ligne():
+    n = int(entree.get())
+    print('supression ligne',n)
+    file = open("blocs.txt", "r")
+    lines = file.readlines()
+    file.close()
+
+    del lines[n-1]
+
+    new_file = open("blocs.txt", "w+")
+    for line in lines:
+        new_file.write(line)
+
+    new_file.close()
+    
+    #Updtae canvas_bouton
+    update(canvas_boutton,affiche_boutons)
+    
+
+#Boutons suppr
+
+label = tk.Label(canvas_supp, text='Bloc à supprimer:')
+label.pack()
+
+entree = tk.Entry(canvas_supp, bd =2, width=3)
+entree.pack()
+
+bouton_del = tk.Button(canvas_supp, text='Supprimer',command=efface_ligne)
+bouton_del.pack()
+
+
+app.mainloop()
