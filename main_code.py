@@ -19,6 +19,9 @@ f = 0.2 #Reduction de taille de l'image
 l = 3024 #Taille image
 L = 4032
 
+#Nouvelle taille de l'image
+l_new = int(l*f)
+L_new = int(L*f)
 
 #clear l'image et affiche la nouvelle
 def clear_and_print_canvas(mur):
@@ -31,6 +34,7 @@ def clear_and_print_canvas(mur):
     canvas.create_image(0,0,image=mur_resized, anchor="nw") 
     canvas.pack(side='right')
     frame.mainloop()
+
 
 
 #                   #
@@ -105,23 +109,6 @@ en_cours.grid(row=3,column=0)
 
 mur = Image.open(photo_mur)
 
-#Nouvelle taille de l'image
-l_new = int(l*f)
-L_new = int(L*f)
-
-#clear l'image et affiche la nouvelle
-def clear_and_print_canvas(mur):
-    global canvas
-    canvas.destroy()
-    global l_new, L_new
-    resized = mur.resize((l_new,L_new),Image.ANTIALIAS)
-    mur_resized = ImageTk.PhotoImage(resized)
-    canvas = tk.Canvas(app, width = l_new, height = L_new)
-    canvas.create_image(0,0,image=mur_resized, anchor="nw") 
-    canvas.pack(side='right')
-    canvas.mainloop()
-
-
 #Resize et affiche pour la 1er fois
 
 resized = mur.resize((l_new,L_new),Image.ANTIALIAS)
@@ -191,7 +178,9 @@ def affiche_boutons():
     
     #fonction pré-finale
     def photo_bloc(n):
-        bloc(liste_blocs[n])
+        call = liste_blocs[n]
+        print(call)
+        bloc(call)
         
     #Cree et affiche les boutons
     liste_bouttons = []
