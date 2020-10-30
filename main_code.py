@@ -1,6 +1,8 @@
 import tkinter as tk
 from PIL import ImageTk,Image,ImageDraw
 from functools import partial
+import sys
+import os.path
 
 
 app = tk.Tk()
@@ -36,7 +38,15 @@ def update(thing,func):
 #   QQ Variables    #
 #                   #
 
-photo_mur = "mur.jpg"
+
+def resource_path(relative):
+    if hasattr(sys, "_MEIPASS"):
+        return os.path.join(sys._MEIPASS, relative)
+    return os.path.join(relative)
+
+
+filename = 'mur.jpg'
+photo_mur = resource_path(os.path.join(filename))
 
 f = 0.2 #Reduction de taille de l'image
 
@@ -219,7 +229,6 @@ affiche_boutons()
 #Fonction qui supprime dans le .txt
 def efface_ligne():
     n = int(entree.get())
-    print('supression ligne',n)
     file = open("blocs.txt", "r")
     lines = file.readlines()
     file.close()
