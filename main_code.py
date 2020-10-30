@@ -155,14 +155,14 @@ def conversion(x):
 
 
 #Trace les points sur les prises 
-def bloc(x):
+def bloc_dessin(x):
 	#On ouvre l'image pour la suite
 	mur = Image.open(photo_mur)
 	#Conversion des coordonées des prises du bloc avec les bonnes coordonées,pour tracer les cercles
-	bloc = conversion(x)
-        #Tracage des cerlces en eux même
+	bloc_to_draw = conversion(x)
+    #Tracage des cerlces en eux même
 	cercle = ImageDraw.Draw(mur)
-	for i in bloc:
+	for i in bloc_to_draw:
 		cercle.arc(i,0,360, fill=228, width=20)
 	#Nouveau canvas et image
 	clear_and_print_canvas(mur)
@@ -198,9 +198,9 @@ def affiche_boutons():
     
     #fonction pré-finale
     def photo_bloc(n):
+        n = int(n)
         call = liste_blocs[n]
-        print(call)
-        bloc(call)
+        bloc_dessin(call)
         
     #Cree et affiche les boutons
     liste_bouttons = []
